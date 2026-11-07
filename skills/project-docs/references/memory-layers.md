@@ -1,37 +1,40 @@
 # Memory layers
 
-## docs/ (this skill)
+## Project docs (git)
 
-- Committed to git → portable, reviewable, shared.
-- Intentional: someone (human or agent) chose to write it.
-- Survives tool switches (Claude ↔ Cursor), machines, and teammates.
-- Best for: brainstorms, plans, ADRs, last-steps handoffs.
+- Portable across Claude ↔ Cursor ↔ machines ↔ Cloud Agents
+- Intentional and reviewable
+- Best for: brainstorms, plans, ADRs, last-steps
 
-## claude-mem
+## claude-mem (both hosts)
 
-- Local worker + SQLite under `~/.claude-mem` (cloud sync optional/paid).
-- Automatic: hooks capture tool activity and summarize across sessions.
-- Works with Claude Code, Cursor, and other supported hosts once installed (`npx claude-mem install`).
-- Best for: “what did we touch last Tuesday?”, recovering context you never wrote down.
-- Not a substitute for git-reviewed decisions.
+**Policy for this skill owner:** install claude-mem for **Claude Code and Cursor** so both write/read the same local project memory.
 
-## Chat / composer history
+```bash
+npx claude-mem install
+# In the installer, enable both Claude Code and Cursor (and any other hosts you use).
+```
 
-- Bound to one product UI.
-- Fine for drafting; promote keepers into `docs/`.
+- Data: `~/.claude-mem` (optional cloud sync is separate)
+- Best for: “what did we try last session?” you never wrote down
+- Gap: not a replacement for git-reviewed decisions; Cloud Agents may not see your local DB
+
+## Chat history
+
+Bound to one UI. Promote keepers into docs.
 
 ## Practical split
 
 | Situation | Prefer |
 | --- | --- |
-| End of session handoff | `docs/last-steps.md` |
-| Choosing a database / API shape | `docs/decisions/` |
-| Multi-step feature checklist | `docs/plans/active/` |
+| End of session / switch AI | `last-steps.md` + mem (automatic) |
+| Choosing DB / auth / public API | `docs/decisions/` (high height → ask) |
+| Multi-step feature | mapped plans root |
 | “Did we already try X?” | claude-mem search, then docs |
-| Secret / token | Neither — use env / secret store |
+| Secret / token | Neither |
 
 ## Hygiene
 
-- Do not mirror full mem timelines into markdown.
-- Do not leave the only copy of a decision in chat or mem.
-- If docs and mem disagree, trust docs for intent; use mem as a clue, then update docs.
+- Do not mirror full mem timelines into markdown
+- Do not leave the only copy of a medium/high decision in chat or mem
+- If docs and mem disagree on intent, trust docs; use mem as a clue; update docs

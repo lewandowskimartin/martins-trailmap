@@ -3,10 +3,11 @@
 ## Cold start checklist
 
 ```text
-[ ] docs/README.md exists? skim conventions
-[ ] docs/last-steps.md → resume point
-[ ] docs/plans/active/ → matching plan?
-[ ] docs/decisions/ → anything constraining this task?
+[ ] Detect layout (docs/, top-level plans/, decisions paths)
+[ ] Read docs/README.md map if present
+[ ] Read last-steps.md → resume point
+[ ] Skim active plans in mapped plans root
+[ ] Open relevant decisions
 [ ] Optional: claude-mem search if last-steps is thin
 [ ] Then work
 ```
@@ -15,20 +16,28 @@
 
 | Event | Write |
 | --- | --- |
-| Exploring options | `brainstorm/YYYY-MM-DD-slug.md` |
-| Agreed approach, multi-step work | `plans/active/slug.md` |
-| Meaningful tradeoff locked in | `decisions/NNNN-slug.md` |
-| Stopping for the day / switching tasks | Update `last-steps.md` |
-| Plan finished | Move plan → `plans/done/`, tick decision to `implemented` if applicable |
+| Exploring options | brainstorm (template) |
+| Agreed multi-step work | plan (template) |
+| Medium/high tradeoff | decision with Height field |
+| Stopping / switching AI or task | update last-steps |
+| Plan finished | move/mark done; set decision `implemented` if applicable |
 
-## Approval gates (lightweight)
+## Decision height gate
 
-Default: write brainstorms and last-steps freely; propose decisions and ask before marking `accepted` if the user is available. If the user said “just decide and document”, accept and proceed.
+| Height | Agent behavior |
+| --- | --- |
+| Low | No ADR; optional last-steps note |
+| Medium | May accept after documenting; reversible preferred |
+| High | Propose only; wait for user; then `accepted` |
 
-Avoid bureaucracy: a one-hour bugfix needs last-steps (maybe) — not an ADR.
+When unsure → high.
 
-## Commit guidance
+## Templates
 
-- Prefer committing docs with the code they describe.
-- Pure docs commits: `docs: …`
-- Do not leave `last-steps.md` claiming work that was never committed.
+New durable files use `assets/templates/*`. Do not mass-convert legacy free-form notes.
+
+## Commits
+
+- Prefer docs with the code they describe
+- Pure docs: `docs: …`
+- last-steps must not claim uncommitted work

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Scaffold docs/ into the current git repo (or target directory).
+# Scaffold or adapt docs/ in the current git repo (or target directory).
+# Respects an existing top-level plans/ directory (does not move it).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -12,7 +13,19 @@ if [[ ! -d "$TEMPLATES" ]]; then
 fi
 
 cd "$TARGET"
-mkdir -p docs/brainstorm docs/plans/active docs/plans/done docs/decisions
+
+HAS_TOP_PLANS=0
+if [[ -d plans ]]; then
+  HAS_TOP_PLANS=1
+fi
+
+mkdir -p docs/brainstorm docs/decisions
+if [[ "$HAS_TOP_PLANS" -eq 1 ]]; then
+  mkdir -p plans/done
+  echo "detected: top-level plans/ — leaving it as the plans root"
+else
+  mkdir -p docs/plans/active docs/plans/done
+fi
 
 copy_if_missing() {
   local src="$1" dest="$2"
@@ -24,13 +37,48 @@ copy_if_missing() {
   fi
 }
 
-copy_if_missing "$TEMPLATES/docs-readme.md" "docs/README.md"
 copy_if_missing "$TEMPLATES/last-steps.md" "docs/last-steps.md"
+
+# README with path map
+if [[ ! -e docs/README.md ]]; then
+  if [[ "$HAS_TOP_PLANS" -eq 1 ]]; then
+    cat > docs/README.md <<'EOF'
+# Project docs
+
+Shared thinking for humans and AI agents (Claude, Cursor, and others).
+
+| Artifact | Path |
+| --- | --- |
+| last-steps | `docs/last-steps.md` |
+| brainstorm | `docs/brainstorm/` |
+| plans | `plans/` (repo root — keep existing) |
+| finished plans | `plans/done/` |
+| decisions | `docs/decisions/` |
+
+## Rules of thumb
+
+1. Resume from `last-steps.md`.
+2. Use templates from the `project-docs` skill for new files.
+3. Decision height: low = skip ADR; medium = agent may accept; high = ask first.
+4. claude-mem on Claude **and** Cursor complements this; it does not replace it.
+5. Keep secrets out of this folder.
+
+Agents: follow the `project-docs` skill.
+EOF
+  else
+    cp "$TEMPLATES/docs-readme.md" docs/README.md
+  fi
+  echo "created: docs/README.md"
+else
+  echo "skip: docs/README.md exists"
+fi
 
 # Seed last-steps with a bootstrap note if still the stock template header only
 if grep -q '^\*\*Branch:\*\*$' docs/last-steps.md 2>/dev/null; then
   branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
   today="$(date -u +%Y-%m-%d)"
+  plans_note="docs/plans/active/"
+  [[ "$HAS_TOP_PLANS" -eq 1 ]] && plans_note="plans/"
   cat > docs/last-steps.md <<EOF
 # Last steps
 
@@ -38,16 +86,16 @@ if grep -q '^\*\*Branch:\*\*$' docs/last-steps.md 2>/dev/null; then
 
 - **Branch:** ${branch}
 - **Updated:** ${today}
-- **Active plan:** none
+- **Active plan:** none (${plans_note})
 - **Related decisions:** none
 
 ## Current state
 
-Bootstrapped \`docs/\` project-docs layout. No prior handoff.
+Bootstrapped project-docs layout. No prior handoff.
 
 ## Just done
 
-- Created \`docs/\` (brainstorm, plans, decisions, last-steps)
+- Created/adapted docs layout (brainstorm, decisions, last-steps; plans → ${plans_note})
 
 ## Next action
 
@@ -64,7 +112,7 @@ EOF
   echo "seeded: docs/last-steps.md"
 fi
 
-# Optional: install skill into this repo for teammates
+# Optional: vendor skill into this repo (Cloud Agents / explicit share)
 SKILL_DEST=".claude/skills/project-docs"
 if [[ "${INSTALL_PROJECT_SKILL:-}" == "1" ]]; then
   mkdir -p .claude/skills
@@ -72,16 +120,25 @@ if [[ "${INSTALL_PROJECT_SKILL:-}" == "1" ]]; then
     echo "skip: $SKILL_DEST exists"
   else
     cp -R "$ROOT/skills/project-docs" "$SKILL_DEST"
-    # Keep templates/references; fine for project copy
     echo "created: $SKILL_DEST"
-    mkdir -p .agents/skills
+    mkdir -p .agents/skills .cursor/skills
     if [[ ! -e .agents/skills/project-docs ]]; then
       ln -s ../../.claude/skills/project-docs .agents/skills/project-docs
       echo "linked: .agents/skills/project-docs"
+    fi
+    if [[ ! -e .cursor/skills/project-docs ]]; then
+      ln -s ../../.claude/skills/project-docs .cursor/skills/project-docs
+      echo "linked: .cursor/skills/project-docs"
     fi
   fi
 fi
 
 echo
-echo "docs/ ready under $(pwd)"
-echo "Tip: INSTALL_PROJECT_SKILL=1 $0  # also copy the skill into this repo"
+echo "docs ready under $(pwd)"
+if [[ "$HAS_TOP_PLANS" -eq 1 ]]; then
+  echo "plans root: ./plans/ (unchanged)"
+else
+  echo "plans root: ./docs/plans/"
+fi
+echo "Solo tip: personal install is enough — ./scripts/install-personal.sh"
+echo "Cloud Agents tip: INSTALL_PROJECT_SKILL=1 $0"

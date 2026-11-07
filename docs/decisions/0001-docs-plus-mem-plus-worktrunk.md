@@ -1,6 +1,7 @@
 # 0001. Three-layer memory: docs + claude-mem + worktrunk
 
 - **Status:** accepted
+- **Height:** high
 - **Date:** 2026-11-07
 - **Supersedes:**
 - **Superseded by:**

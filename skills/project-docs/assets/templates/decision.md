@@ -1,6 +1,7 @@
 # NNNN. <Title>
 
 - **Status:** proposed | accepted | implemented | superseded | rejected
+- **Height:** low | medium | high
 - **Date:** YYYY-MM-DD
 - **Supersedes:** (optional)
 - **Superseded by:** (optional)

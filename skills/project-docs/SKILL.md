@@ -1,157 +1,171 @@
 ---
 name: project-docs
-description: Maintain a git-committed docs/ workspace for brainstorming, plans, decisions, and session handoffs so any agent (Claude Code, Cursor, or others) shares the same project memory. Use when starting work in a repo, resuming after a break, brainstorming, planning, recording a decision, ending a session, switching worktrees with worktrunk, or when the user mentions docs/, last-steps, handoff, ADR, or project memory. Complements claude-mem (automatic local memory) — docs/ is the intentional, portable source of truth.
+description: Maintain git-committed project docs (brainstorms, plans, decisions, last-steps) so Claude Code and Cursor share the same memory. Use when starting or resuming work, brainstorming, planning, recording a decision, ending a session, or when the user mentions docs/, plans/, last-steps, handoff, ADR, or project memory. Adapts to existing docs/ or top-level plans/ layouts. Complements claude-mem (install on both Claude and Cursor) — docs are the intentional portable source of truth. Worktrunk is optional for parallel agents.
 license: MIT
-compatibility: Requires git. Optional: worktrunk (wt), claude-mem. Works in Claude Code and Cursor.
+compatibility: Requires git. Recommended: claude-mem on Claude Code and Cursor. Optional: worktrunk (wt).
 metadata:
   author: project-docs-skill
-  version: "1.0"
+  version: "1.1"
+  audience: solo
 ---
 
 # Project docs
 
-Keep durable project thinking in a committed `docs/` folder. Any AI (or human) that opens the repo can read the same brainstorms, plans, decisions, and last steps.
+Keep durable project thinking in git so any AI (Claude Code, Cursor, …) resumes from the same place. **Owner profile: solo developer** — personal skill install is enough; vendor into a product repo only for Cloud Agents.
 
-## Memory layers (do not confuse them)
+## Memory layers
 
-| Layer | Where | Who sees it | Use for |
-| --- | --- | --- | --- |
-| **docs/** | Git repo | Everyone with the repo; every agent | Intentional brainstorms, plans, decisions, handoffs |
-| **claude-mem** | `~/.claude-mem` (local) | You, on machines where it is installed | Automatic session continuity, search of past tool activity |
-| **Tool chat history** | Claude / Cursor UI | That tool only | Throwaway conversation |
+| Layer | Where | Use for |
+| --- | --- | --- |
+| **Project docs** | Git (`docs/`, and/or existing `plans/`) | Intentional brainstorms, plans, decisions, handoffs |
+| **claude-mem** | `~/.claude-mem` — install for **both** Claude Code and Cursor | Automatic session continuity across tools on this machine |
+| **Chat history** | One product UI | Throwaway draft |
 
 Rules:
-- Prefer writing durable facts into `docs/`, not into chat.
-- Do **not** dump claude-mem observations into `docs/` wholesale.
-- Do **not** skip `docs/` because claude-mem exists — mem is local and automatic; docs are shared and deliberate.
-- If claude-mem search is available and the user asks “what did we do last time?”, search mem first, then reconcile with `docs/last-steps.md`.
+- Prefer writing durable facts into project docs, not into chat.
+- Do **not** dump claude-mem observations into markdown wholesale.
+- Do **not** skip docs because mem exists.
+- Install/configure claude-mem for **both** hosts so switching AI keeps one memory DB for the project.
+- If mem search is available and the user asks “what did we do last time?”, search mem, then reconcile with `last-steps`.
 
-## Layout
+## Layout — detect first, then normalize lightly
+
+**Canonical target** (new repos / greenfield bootstrap):
 
 ```text
 docs/
-  README.md                 # Index + conventions for humans and agents
-  last-steps.md             # Living handoff — always current for this branch
-  brainstorm/               # Explorations (dated or named)
-  plans/                    # Active and archived implementation plans
-    active/                 # One file per in-flight plan
-    done/                   # Completed plans (move here, do not delete)
-  decisions/                # Architecture / product decisions (ADRs)
+  README.md
+  last-steps.md
+  brainstorm/
+  plans/
+    active/
+    done/
+  decisions/
 ```
 
-If `docs/` is missing and this skill is in play, create it with the templates under `assets/templates/` before doing substantial work — or ask once if the user wants a different root name.
+**Existing repos — map, do not fight:**
 
-Default root is **`docs/`** (not `doc/`). Only use another name if the repo already has an established convention.
+| If you find… | Treat as… |
+| --- | --- |
+| `docs/` with mixed notes | Keep `docs/`; add missing pieces (`last-steps.md`, `brainstorm/`, `decisions/`) only as needed |
+| Top-level `plans/` (sibling of `docs/`) | **Keep using it** for plans; do not force-move into `docs/plans/` unless the user asks |
+| `docs/plans/` | Use that for plans |
+| Only `docs/` README / guides | Add `last-steps.md` + `decisions/` beside existing material; leave product docs alone |
+
+Discovery order for plans: `docs/plans/active/` → `docs/plans/` → top-level `plans/` → ask once if ambiguous.
+
+Always prefer the repo’s existing names over renaming for purity. Record the mapped paths in `docs/README.md` (or create a short one) so every agent uses the same map.
+
+Details: [references/layout-detection.md](references/layout-detection.md)
+
+## Templates (recommended)
+
+**Use the templates** under `assets/templates/` for new brainstorm / plan / decision / last-steps files.
+
+Why: same headings across repos → agents skim faster and miss fewer fields. Free-form is fine for tiny scratch notes inside an existing brainstorm; anything you expect another session (or the other AI) to resume from should follow a template.
+
+Do not rewrite old free-form files just to match templates — only new files (or files you are already heavily editing).
+
+## Decision height (acceptance gate)
+
+Not every choice is an ADR. Gate by **height**:
+
+| Height | Examples | Write ADR? | Accept without asking? |
+| --- | --- | --- | --- |
+| **Low** | Rename local var, pick obvious library default, tweak copy | No | N/A — just do it; mention in last-steps if useful |
+| **Medium** | Feature approach, file/module shape, test strategy | Short plan and/or decision as `proposed` → `accepted` | **Yes**, if options were clear and tradeoff is reversible |
+| **High** | Data store, auth model, public API, billing, irreversible migration | Full decision record | **No** — propose, wait for user OK, then mark `accepted` |
+
+When unsure of height, treat as **high** and ask once.
 
 ## Session protocol
 
-### On starting work in a repo
+### Start
 
-1. Read `docs/README.md` if present.
-2. Read `docs/last-steps.md` if present — this is the resume point.
-3. Skim `docs/plans/active/` for anything matching the current task.
-4. If a decision is in scope, open the relevant file under `docs/decisions/`.
-5. Then start coding. Do not re-brainstorm settled decisions.
+1. Detect layout (above); read the docs index / README if present.
+2. Read `last-steps.md` (usually `docs/last-steps.md`).
+3. Skim active plans in the mapped plans location.
+4. Open relevant decisions if the task touches one.
+5. Optional: claude-mem search when last-steps is thin.
+6. Work — do not re-litigate settled decisions.
 
-### While working
+### During
 
-- Update the active plan checklist as tasks complete.
-- When a real choice is made (stack, API shape, tradeoff), write or update a decision record — do not bury it only in chat.
-- Keep brainstorms in `docs/brainstorm/`; promote survivors into plans or decisions.
+- Update the active plan checklist as you go.
+- Medium/high choices → decision file (height rules).
+- Explorations → `brainstorm/`; promote survivors into plans or decisions.
 
-### Before ending a session / handing off / switching tasks
+### End / handoff / switch task or AI
 
-Update `docs/last-steps.md` so a cold agent can resume in under two minutes:
-
-- What changed
-- What is in progress
-- Exact next action
-- Blockers / open questions
-- Pointers to the active plan and relevant decisions
-
-Commit docs updates with the related code when practical (`docs: …` or include in the feature commit).
+Update `last-steps.md` (one screen): current state, just done, exact next action, blockers, pointers to plan/decisions. Commit with related code when practical.
 
 ## File rules
 
 ### `last-steps.md`
 
-- One living file per branch (worktrunk-friendly).
-- Overwrite in place; do not append endless history (git already has history).
-- Short: aim for one screen.
+- One living file per branch; overwrite in place (git has history).
 - Template: `assets/templates/last-steps.md`
 
-### Brainstorms (`docs/brainstorm/`)
+### Brainstorms
 
-- Name: `YYYY-MM-DD-short-slug.md` or `short-slug.md` if dated folders feel heavy.
-- Capture options, open questions, rejected ideas.
-- Mark status: `open` | `promoted` | `abandoned`.
-- When promoted, link to the plan or decision that replaced it.
+- Prefer `docs/brainstorm/YYYY-MM-DD-short-slug.md`
+- Status: `open` | `promoted` | `abandoned`
 - Template: `assets/templates/brainstorm.md`
 
-### Plans (`docs/plans/active/`)
+### Plans
 
-- One plan per meaningful unit of work (feature, migration, investigation).
-- Name: `short-slug.md`.
-- Must include: goal, non-goals, checklist, success criteria, links to decisions.
-- Move to `docs/plans/done/` when finished; add completion date and PR/commit ref.
+- One plan per meaningful unit of work; name `short-slug.md`
+- Include: goal, non-goals, checklist, success criteria, decision links
+- Finish → move to `done/` (under whichever plans root the repo uses)
 - Template: `assets/templates/plan.md`
 
-### Decisions (`docs/decisions/`)
+### Decisions
 
-- Name: `NNNN-short-slug.md` with contiguous zero-padded numbers (`0001-…`).
-- One decision per file.
-- Status lifecycle: `proposed` → `accepted` → `implemented` | `superseded` | `rejected`.
-- Include context, options considered, decision, consequences, and (when useful) a short implementation plan.
-- Never rewrite history of an accepted decision — supersede with a new numbered file.
+- `docs/decisions/NNNN-short-slug.md` (contiguous zero-padded numbers)
+- One decision per file; status: `proposed` → `accepted` → `implemented` | `superseded` | `rejected`
+- Include **Height:** low | medium | high in the front matter list
+- Never rewrite an accepted decision — supersede with a new number
 - Template: `assets/templates/decision.md`
 
-## Worktrunk
+## claude-mem (both tools)
 
-When [worktrunk](https://worktrunk.dev/) / `wt` is available:
+Target setup: **Claude Code and Cursor both wired to claude-mem** via `npx claude-mem install` (pick both hosts in the installer). Same local DB → better migration when switching AI.
 
-- Treat each worktree/branch as its own working context. `docs/last-steps.md` and active plans travel with the branch.
-- Start parallel work with `wt switch -c <branch>` (optionally `-x claude` / agent command).
-- Do not edit another worktree’s files “to help” — update docs on the current branch and merge via PR.
-- Shared durable decisions should land on the default branch through normal review; feature-branch brainstorms/plans can stay branch-local until merged.
-- On `wt remove` / merge cleanup, ensure `last-steps.md` on the surviving branch reflects reality (or clear stale in-progress notes).
-- If `wt list` shows multiple active trunks, say which branch’s docs you are using.
-
-Details: [references/worktrunk.md](references/worktrunk.md)
-
-## claude-mem
-
-When [claude-mem](https://github.com/thedotmack/claude-mem) is installed:
-
-- Let it capture session telemetry automatically.
-- Use mem search for “what happened in past sessions?”.
-- Still write handoffs and decisions to `docs/` so agents without mem (or on another machine) stay aligned.
-- Never put secrets into either layer. Prefer redaction; do not paste API keys into docs.
+- Let mem capture automatically; search it for past-session questions.
+- Still write handoffs/decisions to git for portability and Cloud Agents.
+- No secrets in mem notes or docs.
 
 Details: [references/memory-layers.md](references/memory-layers.md)
 
-## Bootstrap (missing docs/)
+## Worktrunk (optional — not required for solo sequential work)
 
-If the repo has no `docs/` layout and the user wants this workflow:
+Skip Worktrunk if you usually run **one agent at a time** on one branch. Plain git branches are enough.
 
-1. Create the directories above.
-2. Copy templates from `assets/templates/` (adapt names).
-3. Write a short `docs/README.md` from the template.
-4. Seed `last-steps.md` with “Bootstrapped project-docs layout. No prior handoff.”
-5. Commit as `docs: bootstrap project docs layout`.
+**Adopt Worktrunk when** you want two+ agents in parallel (e.g. Cursor on feature A, Claude on feature B) without stash/checkout collisions. Then:
 
-Do not bootstrap unsolicited in a repo that already has a different docs system — adapt to what exists and map brainstorm/plans/decisions/last-steps onto it.
+- `wt switch -c <branch>` per agent; `last-steps` stays branch-local
+- Do not edit sibling worktrees unless asked
+- Details: [references/worktrunk.md](references/worktrunk.md)
+
+## Bootstrap
+
+Greenfield / empty: create the canonical `docs/` tree from templates; seed `last-steps.md`; commit `docs: bootstrap project docs layout`.
+
+Existing layout: map paths, fill gaps only, document the map in `docs/README.md`. Do not relocate top-level `plans/` unless asked.
+
+Solo default: keep the skill personal (`install-personal.sh`). Set `INSTALL_PROJECT_SKILL=1` only when Cloud Agents must load the skill from the repo.
 
 ## Anti-patterns
 
-- Novelizing: multi-page essays nobody will re-read.
-- Dual sources of truth: plan says one thing, last-steps another.
-- Decision spam: logging every tiny choice as an ADR.
-- Skipping last-steps because “the PR description is enough”.
-- Putting secrets, tokens, or personal data in `docs/`.
-- Relying only on claude-mem for team-visible or cross-tool continuity.
+- Novelizing; dual sources of truth; ADR spam for low-height choices
+- Skipping last-steps; putting secrets in docs or mem
+- Relying only on claude-mem for cross-tool continuity without git docs
+- Renaming a working `plans/` tree “for consistency” without being asked
+- Installing Worktrunk “because the skill mentions it” when you never parallelize
 
 ## Progressive detail
 
-- Session checklist detail: [references/session-protocol.md](references/session-protocol.md)
-- Memory layering: [references/memory-layers.md](references/memory-layers.md)
-- Worktrunk patterns: [references/worktrunk.md](references/worktrunk.md)
+- [references/layout-detection.md](references/layout-detection.md)
+- [references/session-protocol.md](references/session-protocol.md)
+- [references/memory-layers.md](references/memory-layers.md)
+- [references/worktrunk.md](references/worktrunk.md)

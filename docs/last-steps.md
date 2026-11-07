@@ -5,28 +5,27 @@
 - **Branch:** main
 - **Updated:** 2026-11-07
 - **Active plan:** none
-- **Related decisions:** `docs/decisions/0001-docs-plus-mem-plus-worktrunk.md`
+- **Related decisions:** `0001`, `0002`
 
 ## Current state
 
-Skill pack v1 is in place: `skills/project-docs`, install/bootstrap scripts, templates, and this `docs/` layout.
+Skill pack **v1.1** encodes solo defaults: templates on, height-based decisions, layout detection for `docs/` + top-level `plans/`, claude-mem on both hosts, Worktrunk optional.
 
 ## Just done
 
-- Researched claude-mem + worktrunk + Agent Skills paths for Claude/Cursor
-- Authored portable `project-docs` skill with references and templates
-- Added `scripts/install-personal.sh` and `scripts/bootstrap-repo.sh`
-- Symlinked skill into `.claude/skills`, `.cursor/skills`, `.agents/skills`
+- Updated `skills/project-docs` to v1.1 from owner answers
+- Bootstrap respects existing top-level `plans/`
+- Recorded `docs/decisions/0002-solo-defaults-v1-1.md`
 
 ## Next action
 
-User answers open questions in README (solo/team, folder name, strictness, decision gate, tooling). Adjust skill defaults if needed, then run `./scripts/install-personal.sh` on local machines.
+On your machines: `./scripts/install-personal.sh`, then `npx claude-mem install` (enable Claude **and** Cursor). Bootstrap product repos with `./scripts/bootstrap-repo.sh ~/path/to/app`. Skip Worktrunk until you parallelize.
 
 ## Blockers / open questions
 
-- See README “Open questions for you”
+- None
 
 ## Do not redo
 
-- Do not treat claude-mem as a replacement for `docs/`
-- Do not invent a heavier docflow suite unless requested
+- Do not move a working top-level `plans/` without being asked
+- Do not install Worktrunk “just because”
