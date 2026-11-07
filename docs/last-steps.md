@@ -5,21 +5,21 @@
 - **Branch:** main
 - **Updated:** 2026-11-07
 - **Active plan:** none
-- **Related decisions:** `0001`, `0002`
+- **Related decisions:** `0001`, `0002`, `0003`
 
 ## Current state
 
-Skill pack **v1.1** encodes solo defaults: templates on, height-based decisions, layout detection for `docs/` + top-level `plans/`, claude-mem on both hosts, Worktrunk optional.
+Skill pack **v1.2** adds companion tooling rules: agentd (big DAG epics only), ECC (optional Claude harness, not merged), Cloudflare security-audit (recommended companion).
 
 ## Just done
 
-- Updated `skills/project-docs` to v1.1 from owner answers
-- Bootstrap respects existing top-level `plans/`
-- Recorded `docs/decisions/0002-solo-defaults-v1-1.md`
+- Analysed obarker94/agentd, affaan-m/ECC, cloudflare/security-audit-skill
+- Encoded when/skip rules + big-dev protocol in SKILL.md
+- Added `references/companion-tooling.md` and decision `0003`
 
 ## Next action
 
-On your machines: `./scripts/install-personal.sh`, then `npx claude-mem install` (enable Claude **and** Cursor). Bootstrap product repos with `./scripts/bootstrap-repo.sh ~/path/to/app`. Skip Worktrunk until you parallelize.
+On machines: install-personal + claude-mem (both hosts) + optional `npx skills add … security-audit --global`. Reach for agentd/worktrunk/ECC only when a real big parallel or Claude-harness need appears.
 
 ## Blockers / open questions
 
@@ -27,5 +27,5 @@ On your machines: `./scripts/install-personal.sh`, then `npx claude-mem install`
 
 ## Do not redo
 
-- Do not move a working top-level `plans/` without being asked
-- Do not install Worktrunk “just because”
+- Do not install ECC or agentd into every product repo by default
+- Do not replace git `docs/` with ECC memory or agentd SQLite

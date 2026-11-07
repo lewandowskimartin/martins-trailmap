@@ -1,11 +1,11 @@
 ---
 name: project-docs
-description: Maintain git-committed project docs (brainstorms, plans, decisions, last-steps) so Claude Code and Cursor share the same memory. Use when starting or resuming work, brainstorming, planning, recording a decision, ending a session, or when the user mentions docs/, plans/, last-steps, handoff, ADR, or project memory. Adapts to existing docs/ or top-level plans/ layouts. Complements claude-mem (install on both Claude and Cursor) — docs are the intentional portable source of truth. Worktrunk is optional for parallel agents.
+description: Maintain git-committed project docs (brainstorms, plans, decisions, last-steps) so Claude Code and Cursor share the same memory. Use when starting or resuming work, brainstorming, planning, recording a decision, ending a session, big multi-agent epics, security audits, or when the user mentions docs/, plans/, last-steps, handoff, ADR, agentd, ECC, or project memory. Adapts to existing docs/ or top-level plans/ layouts. Complements claude-mem; optional companions: worktrunk, agentd (DAG parallel tasks), Cloudflare security-audit skill, ECC (heavy Claude harness — selective).
 license: MIT
-compatibility: Requires git. Recommended: claude-mem on Claude Code and Cursor. Optional: worktrunk (wt).
+compatibility: Requires git. Recommended: claude-mem on Claude Code and Cursor. Optional: worktrunk, agentd MCP, Cloudflare security-audit skill, ECC plugin.
 metadata:
   author: project-docs-skill
-  version: "1.1"
+  version: "1.2"
   audience: solo
 ---
 
@@ -147,6 +147,47 @@ Skip Worktrunk if you usually run **one agent at a time** on one branch. Plain g
 - Do not edit sibling worktrees unless asked
 - Details: [references/worktrunk.md](references/worktrunk.md)
 
+## Companion tooling (big work)
+
+Do **not** install everything by default. Layer tools only when the work shape needs them. Full analysis: [references/companion-tooling.md](references/companion-tooling.md)
+
+| Tool | Worth it when… | Skip when… | How it fits `docs/` |
+| --- | --- | --- | --- |
+| **[agentd](https://github.com/obarker94/agentd)** (MCP task DAG) | Large epic with many dependent tasks and true parallel agents claiming work | Single-threaded feature; markdown plan is enough | Keep human-readable plan in `plans/`; agentd holds runtime claim/state. Mirror epic status into `last-steps.md` |
+| **[worktrunk](https://worktrunk.dev/)** | Parallel agents need isolated checkouts | One agent / one branch | Branch-local `last-steps` / plans |
+| **[security-audit](https://github.com/cloudflare/security-audit-skill)** | Shipping auth, payments, multi-tenant, public APIs, or any high-height security surface | Tiny internal scripts with no trust boundary | Run audit → link report path + confirmed finding IDs from `last-steps` or a decision; do not paste full findings dumps into git unless asked |
+| **[ECC](https://github.com/affaan-m/ECC)** | You want a full Claude Code engineering harness (plan→test→review agents) | You want a lean Cursor+Claude docs workflow | **Optional install, not merged into this skill.** If installed, still treat git `docs/` as source of truth; do not let ECC memory replace `last-steps` / decisions |
+
+### Big-dev protocol (when an epic is medium/high height)
+
+1. Write/refresh a **plan** (template) with checklist + success criteria.
+2. Split only if tasks are truly parallelizable → optional **agentd** DAG + **worktrunk** per worker.
+3. Implement with normal session protocol (`last-steps` updates).
+4. Before merge/ship of sensitive surfaces → invoke **security-audit** (Cloudflare skill).
+5. Record high-height outcomes as **decisions**; update `last-steps`.
+
+Borrowed from ECC without requiring ECC: for big work prefer **plan → test → implement → review → verify → remember (docs/last-steps + decisions)**. Do not install 300+ ECC skills just to get that loop.
+
+### agentd specifics
+
+- MCP server: projects, tasks with dependencies, claim/complete, parallel coordination ([obarker94/agentd](https://github.com/obarker94/agentd)).
+- Worth it on **big** multi-track work where a markdown checklist cannot express blocking edges and multiple agents need a claim mutex.
+- Not worth it for ordinary features — adds daemon/MCP surface area for little gain over `plans/active/*.md`.
+- If used: create project from the plan; task titles/prompts should point at plan section + relevant decisions; on complete, tick the plan checklist and refresh `last-steps`.
+
+### security-audit specifics
+
+- Install separately (global): `npx skills add https://github.com/cloudflare/security-audit-skill --skill security-audit --global`
+- Trigger phrases: “security audit”, “find vulnerabilities”, “pen-test this”.
+- Prefer output outside the repo (skill default) or an ignored path; summarize confirmed items into a decision or plan note with links.
+- Defense-in-depth gaps ≠ confirmed vulns — respect the skill’s verdicts (`confirmed` / `needs_validation` / `rejected`).
+
+### ECC specifics
+
+- Large Claude-first plugin (agents + skills + hooks). Cursor support is adapter/limited vs Claude Code.
+- **Do not** vendor ECC into this skill pack or auto-bootstrap it into product repos.
+- If the user already runs ECC: coexist — git docs win for intentional memory; avoid duplicate handoff systems.
+
 ## Bootstrap
 
 Greenfield / empty: create the canonical `docs/` tree from templates; seed `last-steps.md`; commit `docs: bootstrap project docs layout`.
@@ -161,7 +202,9 @@ Solo default: keep the skill personal (`install-personal.sh`). Set `INSTALL_PROJ
 - Skipping last-steps; putting secrets in docs or mem
 - Relying only on claude-mem for cross-tool continuity without git docs
 - Renaming a working `plans/` tree “for consistency” without being asked
-- Installing Worktrunk “because the skill mentions it” when you never parallelize
+- Installing Worktrunk / agentd / ECC “because the skill mentions them” when the work is a single linear feature
+- Replacing git decisions/last-steps with ECC or agentd state alone
+- Pasting full security-audit `findings.json` into the product repo by default
 
 ## Progressive detail
 
@@ -169,3 +212,4 @@ Solo default: keep the skill personal (`install-personal.sh`). Set `INSTALL_PROJ
 - [references/session-protocol.md](references/session-protocol.md)
 - [references/memory-layers.md](references/memory-layers.md)
 - [references/worktrunk.md](references/worktrunk.md)
+- [references/companion-tooling.md](references/companion-tooling.md)
