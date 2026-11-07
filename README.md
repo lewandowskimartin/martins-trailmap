@@ -2,7 +2,7 @@
 
 Portable **Agent Skill** so Claude Code and Cursor share one git-committed docs workflow — beside [claude-mem](https://github.com/thedotmack/claude-mem) and optional [worktrunk](https://github.com/max-sixty/worktrunk).
 
-## Your locked-in defaults (v1.2)
+## Your locked-in defaults (v1.3)
 
 | Topic | Choice |
 | --- | --- |
@@ -15,6 +15,7 @@ Portable **Agent Skill** so Claude Code and Cursor share one git-committed docs 
 | agentd | **Optional** — large DAG / multi-agent epics only |
 | ECC | **Optional** Claude harness — do **not** merge into this skill; borrow the engineering loop |
 | security-audit | **Yes** as companion skill for sensitive surfaces / pre-ship |
+| Work loop | Orient → sense-check → research? → plan → parallel? → branch → baseline → **implement** → verify → brief check → security → fixes → end report |
 
 ## Verdict
 
@@ -108,3 +109,4 @@ docs/                    # dogfood of the workflow
 - `docs/decisions/0001-docs-plus-mem-plus-worktrunk.md` — three-layer memory
 - `docs/decisions/0002-solo-defaults-v1-1.md` — solo defaults
 - `docs/decisions/0003-companion-tooling.md` — agentd / ECC / security-audit
+- `docs/decisions/0004-work-loop.md` — canonical feature work loop

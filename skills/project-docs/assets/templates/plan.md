@@ -25,6 +25,17 @@ One paragraph. What “done” looks like.
 - [ ] …
 - [ ] …
 
+## Verify plan
+
+Commands/tests that will prove done (fill before implement when possible):
+
+- …
+
+## Security note
+
+- **Expected pass:** lightweight | full security-audit
+- **Why:** (trust boundary? user data? public API?)
+
 ## Notes
 
-Risks, sequencing, test approach — keep short.
+Risks, sequencing, parallel workers? — keep short.

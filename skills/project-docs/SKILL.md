@@ -1,11 +1,11 @@
 ---
 name: project-docs
-description: Maintain git-committed project docs (brainstorms, plans, decisions, last-steps) so Claude Code and Cursor share the same memory. Use when starting or resuming work, brainstorming, planning, recording a decision, ending a session, big multi-agent epics, security audits, or when the user mentions docs/, plans/, last-steps, handoff, ADR, agentd, ECC, or project memory. Adapts to existing docs/ or top-level plans/ layouts. Complements claude-mem; optional companions: worktrunk, agentd (DAG parallel tasks), Cloudflare security-audit skill, ECC (heavy Claude harness — selective).
+description: Maintain git-committed project docs (brainstorms, plans, decisions, last-steps) so Claude Code and Cursor share the same memory. Use when starting or resuming work, running the feature work loop (orient, sense-check, research, plan, branch, implement, verify, brief-check, security, end report), brainstorming, planning, recording a decision, ending a session, big multi-agent epics, security audits, or when the user mentions docs/, plans/, last-steps, handoff, ADR, agentd, ECC, or project memory. Adapts to existing docs/ or top-level plans/ layouts. Complements claude-mem; optional companions: worktrunk, agentd, Cloudflare security-audit, ECC.
 license: MIT
 compatibility: Requires git. Recommended: claude-mem on Claude Code and Cursor. Optional: worktrunk, agentd MCP, Cloudflare security-audit skill, ECC plugin.
 metadata:
   author: project-docs-skill
-  version: "1.2"
+  version: "1.3"
   audience: solo
 ---
 
@@ -78,26 +78,29 @@ Not every choice is an ADR. Gate by **height**:
 
 When unsure of height, treat as **high** and ask once.
 
-## Session protocol
+## Work loop (default for feature / epic work)
 
-### Start
+Follow this order. Scale depth by height — low work may collapse steps; do not skip **verify** or **last-steps** on medium/high.
 
-1. Detect layout (above); read the docs index / README if present.
-2. Read `last-steps.md` (usually `docs/last-steps.md`).
-3. Skim active plans in the mapped plans location.
-4. Open relevant decisions if the task touches one.
-5. Optional: claude-mem search when last-steps is thin.
-6. Work — do not re-litigate settled decisions.
+1. **Orient** — layout map → `last-steps` → active plan (if any) → relevant decisions → optional claude-mem search.
+2. **Sense-check** — real ask, scope, height, constraints, risks. Stop or ask if the ask is confused.
+3. **Research / facts** — only if plan missing/stale or facts uncertain. Prefer primary sources over guesses.
+4. **Plan gate** — write/update plan from template; high-height decisions → propose and wait.
+5. **Parallelism check** — would 2+ workers help? Default **no**. If yes → agentd and/or worktrunk; else one agent.
+6. **Branch setup** — feature branch; worktrunk/worktree only when parallel or isolation is needed.
+7. **Baseline** — fact-check current code; note failing/absent tests that prove the gap (before changing things).
+8. **Implement** — do the work; tick plan checklist as you go. *(Do not jump from branch setup straight to “audit the code”.)*
+9. **Verify** — run tests/commands; keep evidence the work is done (fact-based, not “looks fine”).
+10. **Brief check** — cross-check code vs plan success criteria. Call out gaps explicitly.
+11. **Security** — lightweight pass always (secrets, authz, PII logs, unsafe defaults). Full **security-audit** skill when trust boundaries / high height / pre-ship.
+12. **Fixes** — only for real gaps from verify / brief / security.
+13. **End report** — move plan to `done/` (or mark done), write short end report, refresh `last-steps`.
 
-### During
+Details, gating tables, and rationale: [references/work-loop.md](references/work-loop.md). End report template: `assets/templates/end-report.md`.
 
-- Update the active plan checklist as you go.
-- Medium/high choices → decision file (height rules).
-- Explorations → `brainstorm/`; promote survivors into plans or decisions.
+### Handoff mid-loop
 
-### End / handoff / switch task or AI
-
-Update `last-steps.md` (one screen): current state, just done, exact next action, blockers, pointers to plan/decisions. Commit with related code when practical.
+If stopping before the end report: update `last-steps.md` with exact next step, plan pointer, and what’s already verified. Commit docs with related code when practical.
 
 ## File rules
 
@@ -205,9 +208,13 @@ Solo default: keep the skill personal (`install-personal.sh`). Set `INSTALL_PROJ
 - Installing Worktrunk / agentd / ECC “because the skill mentions them” when the work is a single linear feature
 - Replacing git decisions/last-steps with ECC or agentd state alone
 - Pasting full security-audit `findings.json` into the product repo by default
+- Running full security-audit on every low-height chore
+- Skipping **Implement** and treating the loop as audit-only
+- Claiming “done” without verify evidence or brief check
 
 ## Progressive detail
 
+- [references/work-loop.md](references/work-loop.md)
 - [references/layout-detection.md](references/layout-detection.md)
 - [references/session-protocol.md](references/session-protocol.md)
 - [references/memory-layers.md](references/memory-layers.md)

@@ -5,21 +5,21 @@
 - **Branch:** main
 - **Updated:** 2026-11-07
 - **Active plan:** none
-- **Related decisions:** `0001`, `0002`, `0003`
+- **Related decisions:** `0001`–`0004`
 
 ## Current state
 
-Skill pack **v1.2** adds companion tooling rules: agentd (big DAG epics only), ECC (optional Claude harness, not merged), Cloudflare security-audit (recommended companion).
+Skill pack **v1.3** encodes the canonical feature work loop (with Implement, gated security-audit, and git end reports).
 
 ## Just done
 
-- Analysed obarker94/agentd, affaan-m/ECC, cloudflare/security-audit-skill
-- Encoded when/skip rules + big-dev protocol in SKILL.md
-- Added `references/companion-tooling.md` and decision `0003`
+- Sense-checked owner’s proposed checklist; refined order and gates
+- Added `references/work-loop.md`, end-report template, decision `0004`
+- Promoted work loop to primary session protocol in SKILL.md
 
 ## Next action
 
-On machines: install-personal + claude-mem (both hosts) + optional `npx skills add … security-audit --global`. Reach for agentd/worktrunk/ECC only when a real big parallel or Claude-harness need appears.
+Use the work loop on the next real feature. On machines: install-personal + claude-mem + optional security-audit skill.
 
 ## Blockers / open questions
 
@@ -27,5 +27,5 @@ On machines: install-personal + claude-mem (both hosts) + optional `npx skills a
 
 ## Do not redo
 
-- Do not install ECC or agentd into every product repo by default
-- Do not replace git `docs/` with ECC memory or agentd SQLite
+- Do not run full security-audit on every low-height chore
+- Do not skip Implement and treat the loop as audit-only
