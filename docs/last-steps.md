@@ -5,20 +5,20 @@
 - **Branch:** main
 - **Updated:** 2026-11-08
 - **Active plan:** none
-- **Related decisions:** `0001`–`0006`
+- **Related decisions:** `0001`–`0007`
 
 ## Current state
 
-Skill/repo branded **Martin's Trailmap**; technical skill id `martins-trailmap` (v1.4 content unchanged aside from rename).
+Martin's Trailmap **v1.5** adds memory-privacy rules for claude-mem (confidential → docs-only; no secrets; CMEM Pro off by default).
 
 ## Just done
 
-- Renamed `skills/project-docs` → `skills/martins-trailmap`
-- Updated install/bootstrap paths and docs; decision `0006`
+- Added privacy section + confidential markers (`.trailmap-private` / README flag)
+- Decision `0007`
 
 ## Next action
 
-Create GitHub repo as `martins-trailmap` (or `martin's-trailmap` if you insist on the apostrophe). Re-run `./scripts/install-personal.sh` on machines; refresh product repos with `REFRESH_PROJECT_SKILL=1`.
+Pull/push on local GitHub clone if needed; `REFRESH_PROJECT_SKILL=1` bootstrap on product apps. For NDA repos, add `docs/.trailmap-private`.
 
 ## Blockers / open questions
 
@@ -26,4 +26,4 @@ Create GitHub repo as `martins-trailmap` (or `martin's-trailmap` if you insist o
 
 ## Do not redo
 
-- Do not use skill `name: martin's-trailmap` — apostrophe is invalid; keep `martins-trailmap`
+- Do not treat claude-mem as safe for confidential client work

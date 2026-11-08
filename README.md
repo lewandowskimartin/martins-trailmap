@@ -6,7 +6,7 @@ Lean-startup **Agent Skill** for solo Claude + Cursor: living git docs, height-g
 - **Skill id (folder + `/` command):** `martins-trailmap`  
   (Agent Skills disallow apostrophes in `name`)
 
-## Defaults (v1.4)
+## Defaults (v1.5)
 
 | Topic | Choice |
 | --- | --- |
@@ -20,6 +20,7 @@ Lean-startup **Agent Skill** for solo Claude + Cursor: living git docs, height-g
 | Skill install | Personal **and** vendored into product repos (Cloud) |
 | Worktrunk / agentd / ECC | Optional |
 | security-audit | Companion for trust boundaries |
+| Memory privacy | Local claude-mem OK for own work; **docs-only** on confidential/NDA; CMEM Pro off; never store secrets in mem/docs |
 
 ## Work loop (short)
 
@@ -52,4 +53,4 @@ Fine for lean startup. Pure TDD on every MMF slows learning; empty tests-after l
 
 ## Decisions
 
-- `0001` memory layers · `0002` solo defaults · `0003` companions · `0004` work loop · `0005` lean v1.4 · `0006` rename to Martin's Trailmap
+- `0001`–`0006` prior · `0007` memory privacy

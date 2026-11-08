@@ -6,7 +6,7 @@ compatibility: Requires git. Recommended: claude-mem on Claude and Cursor; vendo
 metadata:
   author: martin
   display-name: Martin's Trailmap
-  version: "1.4"
+  version: "1.5"
   audience: solo-lean-startup
 ---
 
@@ -31,6 +31,25 @@ Hand off through `docs/` (especially the living plan + `last-steps.md`), not cha
 | **Chat** | One UI | Throwaway draft |
 
 Prefer docs over chat. Do not dump mem into markdown. Mem complements docs; it does not replace them.
+
+### Memory privacy (confidential work)
+
+claude-mem is **not** a vault. It may store paths, code, prompts, and summaries under `~/.claude-mem`. With `--provider claude`, observation compression can send session-derived content to **Anthropic**. CMEM Pro / cloud sync can send data off-machine — keep it **OFF** unless the user explicitly opts in.
+
+| Project sensitivity | Policy |
+| --- | --- |
+| Own product / non-sensitive | claude-mem OK (local; cloud sync off) |
+| Client NDA, regulated, production secrets, “confidential” | **Trailmap docs only** — do not rely on claude-mem; prefer not to run mem-backed sessions on that repo |
+| Unsure | Ask once; default to docs-only handoff |
+
+Agent rules:
+- Never put secrets, tokens, private keys, or raw PII into docs, plans, last-steps, end reports, PR bodies, or mem notes.
+- Prefer env / secret stores; redact in examples (`REDACTED`, `***`).
+- If the user marks a repo confidential (or `docs/README.md` / `CLAUDE.md` / `.trailmap-private` says so): use living plans + last-steps only; do not search or cite claude-mem; remind once that mem may still capture if the plugin is installed system-wide.
+- Do not enable or recommend CMEM Pro / cloud sync for confidential work.
+- Lightweight security pass includes: “no secrets landed in docs/mem/PR.”
+
+Details: [references/memory-layers.md](references/memory-layers.md).
 
 ## Layout — detect first
 
@@ -157,7 +176,13 @@ Medium/high after PR: `assets/templates/end-report.md` beside done plan (include
 
 ## claude-mem
 
-Install for **Claude and Cursor**: `npx claude-mem install`. Same local DB when switching tools. Still write intentional facts to git (required for Cloud).
+Install for **Claude and Cursor** when the work is non-confidential:
+
+```bash
+npx claude-mem install --runtime worker --ide claude-code --ide cursor --provider claude
+```
+
+Prefer **local provider**, **cloud sync OFF**, no CMEM Pro unless the user wants paid sync. Same local DB when switching tools. Still write intentional facts to git (required for Cloud Agents). On confidential repos, skip mem — Trailmap docs are enough.
 
 ## Tooling (optional layers)
 
@@ -188,6 +213,9 @@ Existing: map, fill gaps, don’t relocate `plans/` unless asked.
 - Stale plans never updated; or a new plan file per idle thought
 - Claude and Cursor editing the same checkout without isolation
 - Novelizing docs; secrets in docs/mem/PR bodies
+- Assuming claude-mem is safe for NDA/client/regulated repos
+- Enabling CMEM Pro / cloud sync “for convenience” on confidential work
+- Pasting production secrets into chat “so mem remembers them”
 
 ## Progressive detail
 

@@ -57,7 +57,9 @@ Evaluated for a **solo** developer doing occasional **big** multi-agent work, wi
 docs plan (required)
     ├─ worktrunk          if parallel checkouts
     ├─ agentd            if DAG + claim coordination
-    ├─ claude-mem        always (both hosts)
+    ├─ claude-mem        non-confidential only (local; cloud sync off)
     └─ security-audit    before ship / on security ask
 ECC                      optional Claude harness — orthogonal
 ```
+
+Confidential / NDA epics: skip claude-mem; rely on living plans + last-steps.

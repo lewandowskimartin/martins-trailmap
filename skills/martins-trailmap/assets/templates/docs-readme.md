@@ -18,7 +18,9 @@ If plans live at top-level `plans/`, say so in this table and keep using that ro
 2. **Claude** specs; **Cursor** codes toward a **PR**.
 3. Plan gate: medium → go; high → show and wait.
 4. Soft tests before, full tests after; diff review before PR; no sloppy code.
-5. claude-mem on both hosts; git docs remain source of truth.
-6. Worktrunk/agentd only for real parallel work.
+5. claude-mem on both hosts for non-confidential work only; git docs remain source of truth.
+6. Confidential / NDA repos: Trailmap docs only — add `docs/.trailmap-private` or `Trailmap privacy: confidential` in this README.
+7. Never commit secrets; keep CMEM Pro / cloud sync off unless explicitly opted in.
+8. Worktrunk/agentd only for real parallel work.
 
 Agents: follow the `martins-trailmap` skill (Martin's Trailmap).
