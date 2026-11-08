@@ -6,19 +6,20 @@
 - **Updated:** 2026-11-08
 - **Active plan:** none
 - **Related decisions:** `0001`–`0007`
+- **Spike:** `docs/brainstorm/2026-11-08-trailmap-fitness-audit.md`
 
 ## Current state
 
-Martin's Trailmap **v1.5** adds memory-privacy rules for claude-mem (confidential → docs-only; no secrets; CMEM Pro off by default).
+Fitness audit of Trailmap v1.5 for speed / accuracy / safety complete (spike). Verdict: good to use; safety needs privacy discipline on confidential repos.
 
 ## Just done
 
-- Added privacy section + confidential markers (`.trailmap-private` / README flag)
-- Decision `0007`
+- Orient + sense-check of skill pack
+- Wrote fitness audit brainstorm
 
 ## Next action
 
-Pull/push on local GitHub clone if needed; `REFRESH_PROJECT_SKILL=1` bootstrap on product apps. For NDA repos, add `docs/.trailmap-private`.
+Optional: commit/push audit note; dogfood Trailmap on one real product MMF. User may want PR for the brainstorm doc.
 
 ## Blockers / open questions
 
@@ -26,4 +27,4 @@ Pull/push on local GitHub clone if needed; `REFRESH_PROJECT_SKILL=1` bootstrap o
 
 ## Do not redo
 
-- Do not treat claude-mem as safe for confidential client work
+- Do not treat mem as safe for NDA work
