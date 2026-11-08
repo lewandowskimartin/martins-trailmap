@@ -6,7 +6,7 @@ Lean-startup **Agent Skill** for solo Claude + Cursor: living git docs, height-g
 - **Skill id (folder + `/` command):** `martins-trailmap`  
   (Agent Skills disallow apostrophes in `name`)
 
-## Defaults (v1.5)
+## Defaults (v1.6)
 
 | Topic | Choice |
 | --- | --- |
@@ -21,6 +21,7 @@ Lean-startup **Agent Skill** for solo Claude + Cursor: living git docs, height-g
 | Worktrunk / agentd / ECC | Optional |
 | security-audit | Companion for trust boundaries |
 | Memory privacy | Local claude-mem OK for own work; **docs-only** on confidential/NDA; CMEM Pro off; never store secrets in mem/docs |
+| Git hygiene | Never commit `.DS_Store` / OS junk; bootstrap seeds `.gitignore` |
 
 ## Work loop (short)
 

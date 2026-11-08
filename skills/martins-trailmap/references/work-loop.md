@@ -76,6 +76,13 @@ Code work is not done until a **PR exists** (unless user said commit-only). PR b
 - No secrets, PII logs, or wide-open authz
 - Tests assert behavior (not just smoke)
 - Dead code / obviously sloppy structure fixed before PR
+- No OS/junk files (`.DS_Store`, `Thumbs.db`, `Desktop.ini`, `._*`, editor swap `*~` / `*.swp`)
+
+### Ship hygiene
+
+- Never `git add -A` blindly on a Mac without checking for `.DS_Store`
+- Keep `.DS_Store` / `**/.DS_Store` (and Windows equivalents) in `.gitignore`
+- Untrack already-committed junk with `git rm --cached` + keep the ignore
 
 ## Tests: soft before, full after
 

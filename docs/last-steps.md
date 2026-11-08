@@ -10,16 +10,16 @@
 
 ## Current state
 
-Fitness audit of Trailmap v1.5 for speed / accuracy / safety complete (spike). Verdict: good to use; safety needs privacy discipline on confidential repos.
+Trailmap **v1.6** — agents must not commit `.DS_Store` / OS junk; bootstrap ensures `.gitignore` entries.
 
 ## Just done
 
-- Orient + sense-check of skill pack
-- Wrote fitness audit brainstorm
+- Fitness audit spike
+- Added junk-file ship hygiene + repo `.gitignore` + bootstrap ignore seeding
 
 ## Next action
 
-Optional: commit/push audit note; dogfood Trailmap on one real product MMF. User may want PR for the brainstorm doc.
+`git pull origin main && git push github main` on Mac clone; dogfood on a product MMF.
 
 ## Blockers / open questions
 

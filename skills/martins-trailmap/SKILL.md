@@ -6,7 +6,7 @@ compatibility: Requires git. Recommended: claude-mem on Claude and Cursor; vendo
 metadata:
   author: martin
   display-name: Martin's Trailmap
-  version: "1.5"
+  version: "1.6"
   audience: solo-lean-startup
 ---
 
@@ -123,8 +123,25 @@ This is the **one** pipeline. Ignore older “big-dev protocol” wording elsewh
 11. **Diff review** — fresh pass on the diff: clarity, edge cases, no sloppy code
 12. **Security** — lightweight always; full security-audit if trust boundary / high / pre-ship
 13. **Fixes** — only gaps from 9–12
-14. **Ship** — commit → push → **open PR** (aim of the loop)
+14. **Ship** — commit → push → **open PR** (aim of the loop). Never stage junk files (see below).
 15. **End report** — plan → done (or update), end report + PR link, refresh `last-steps`
+
+### Do not commit junk / OS noise
+
+Never add or commit machine/OS clutter. Before every `git add` / commit:
+
+- Reject: `.DS_Store`, `._*`, `.AppleDouble`, `Thumbs.db`, `Desktop.ini`, `*~`, `*.swp`, `.vscode/` settings that are personal-only (unless the repo already tracks shared editor config on purpose)
+- Ensure root `.gitignore` includes at least:
+
+```gitignore
+.DS_Store
+**/.DS_Store
+Thumbs.db
+Desktop.ini
+```
+
+- If a junk file is already tracked: `git rm --cached` it and keep the ignore rule
+- Diff review / ship checklist includes: “no `.DS_Store` or OS junk in the commit”
 
 ### Low mini-loop
 
@@ -216,6 +233,7 @@ Existing: map, fill gaps, don’t relocate `plans/` unless asked.
 - Assuming claude-mem is safe for NDA/client/regulated repos
 - Enabling CMEM Pro / cloud sync “for convenience” on confidential work
 - Pasting production secrets into chat “so mem remembers them”
+- Committing `.DS_Store`, `Thumbs.db`, editor swap files, or other OS/junk noise
 
 ## Progressive detail
 

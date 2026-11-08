@@ -112,6 +112,20 @@ EOF
   echo "seeded: docs/last-steps.md"
 fi
 
+# Ensure OS junk is ignored (macOS .DS_Store, etc.)
+ensure_gitignore_line() {
+  local line="$1"
+  touch .gitignore
+  if ! grep -qxF "$line" .gitignore 2>/dev/null; then
+    echo "$line" >> .gitignore
+    echo "gitignore: added $line"
+  fi
+}
+ensure_gitignore_line ".DS_Store"
+ensure_gitignore_line "**/.DS_Store"
+ensure_gitignore_line "Thumbs.db"
+ensure_gitignore_line "Desktop.ini"
+
 # Vendor skill into the repo by default (Cursor Cloud needs repo skills).
 # Skip with: SKIP_PROJECT_SKILL=1
 SKILL_DEST=".claude/skills/martins-trailmap"
