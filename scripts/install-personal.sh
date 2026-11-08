@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Install project-docs as a personal skill for Claude Code and Cursor.
+# Install Martin's Trailmap as a personal skill for Claude Code and Cursor.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SRC="$ROOT/skills/project-docs"
-NAME="project-docs"
+SRC="$ROOT/skills/martins-trailmap"
+NAME="martins-trailmap"
 
 if [[ ! -f "$SRC/SKILL.md" ]]; then
   echo "error: missing $SRC/SKILL.md" >&2
@@ -20,20 +20,29 @@ link_skill() {
       echo "ok: $dest already linked"
       return
     fi
-    echo "error: $dest exists (remove or rename it, then re-run)" >&2
-    exit 1
+    # Replace stale project-docs link from earlier versions
+    if [[ -L "$dest_parent/project-docs" ]]; then
+      rm -f "$dest_parent/project-docs"
+      echo "removed: stale $dest_parent/project-docs symlink"
+    fi
+    if [[ -e "$dest" || -L "$dest" ]]; then
+      echo "error: $dest exists (remove or rename it, then re-run)" >&2
+      exit 1
+    fi
   fi
   ln -s "$SRC" "$dest"
   echo "linked: $dest -> $SRC"
+  # Clean old name if present
+  if [[ -L "$dest_parent/project-docs" ]]; then
+    rm -f "$dest_parent/project-docs"
+    echo "removed: stale $dest_parent/project-docs symlink"
+  fi
 }
 
 link_skill "$HOME/.claude/skills"
 link_skill "$HOME/.cursor/skills"
-
-# Vendor-neutral personal path (Cursor / Codex-friendly)
 link_skill "$HOME/.agents/skills"
 
 echo
-echo "Personal install complete."
-echo "Claude Code and Cursor both load ~/.claude/skills/; Cursor also loads ~/.cursor/skills/."
-echo "Open a repo and invoke /project-docs, or let the agent auto-apply from the description."
+echo "Martin's Trailmap personal install complete."
+echo "Invoke /martins-trailmap or let the agent auto-apply from the description."

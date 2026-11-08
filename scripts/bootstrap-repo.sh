@@ -4,7 +4,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-TEMPLATES="$ROOT/skills/project-docs/assets/templates"
+TEMPLATES="$ROOT/skills/martins-trailmap/assets/templates"
 TARGET="${1:-.}"
 
 if [[ ! -d "$TEMPLATES" ]]; then
@@ -58,12 +58,12 @@ Shared thinking for humans and AI agents (Claude, Cursor, and others).
 ## Rules of thumb
 
 1. Resume from `last-steps.md`.
-2. Use templates from the `project-docs` skill for new files.
+2. Use templates from the `martins-trailmap` skill for new files.
 3. Decision height: low = skip ADR; medium = agent may accept; high = ask first.
 4. claude-mem on Claude **and** Cursor complements this; it does not replace it.
 5. Keep secrets out of this folder.
 
-Agents: follow the `project-docs` skill.
+Agents: follow the `martins-trailmap` skill.
 EOF
   else
     cp "$TEMPLATES/docs-readme.md" docs/README.md
@@ -91,7 +91,7 @@ if grep -q '^\*\*Branch:\*\*$' docs/last-steps.md 2>/dev/null; then
 
 ## Current state
 
-Bootstrapped project-docs layout. No prior handoff.
+Bootstrapped Martin's Trailmap layout. No prior handoff.
 
 ## Just done
 
@@ -114,7 +114,7 @@ fi
 
 # Vendor skill into the repo by default (Cursor Cloud needs repo skills).
 # Skip with: SKIP_PROJECT_SKILL=1
-SKILL_DEST=".claude/skills/project-docs"
+SKILL_DEST=".claude/skills/martins-trailmap"
 if [[ "${SKIP_PROJECT_SKILL:-}" == "1" ]]; then
   echo "skip: project skill vendoring (SKIP_PROJECT_SKILL=1)"
 else
@@ -123,23 +123,23 @@ else
     # Refresh copy when bootstrapping from an updated skill pack
     if [[ "${REFRESH_PROJECT_SKILL:-}" == "1" ]]; then
       rm -rf "$SKILL_DEST"
-      cp -R "$ROOT/skills/project-docs" "$SKILL_DEST"
+      cp -R "$ROOT/skills/martins-trailmap" "$SKILL_DEST"
       echo "refreshed: $SKILL_DEST"
     else
       echo "skip: $SKILL_DEST exists (REFRESH_PROJECT_SKILL=1 to replace)"
     fi
   else
-    cp -R "$ROOT/skills/project-docs" "$SKILL_DEST"
+    cp -R "$ROOT/skills/martins-trailmap" "$SKILL_DEST"
     echo "created: $SKILL_DEST"
   fi
   mkdir -p .agents/skills .cursor/skills
-  if [[ ! -e .agents/skills/project-docs ]]; then
-    ln -s ../../.claude/skills/project-docs .agents/skills/project-docs
-    echo "linked: .agents/skills/project-docs"
+  if [[ ! -e .agents/skills/martins-trailmap ]]; then
+    ln -s ../../.claude/skills/martins-trailmap .agents/skills/martins-trailmap
+    echo "linked: .agents/skills/martins-trailmap"
   fi
-  if [[ ! -e .cursor/skills/project-docs ]]; then
-    ln -s ../../.claude/skills/project-docs .cursor/skills/project-docs
-    echo "linked: .cursor/skills/project-docs"
+  if [[ ! -e .cursor/skills/martins-trailmap ]]; then
+    ln -s ../../.claude/skills/martins-trailmap .cursor/skills/martins-trailmap
+    echo "linked: .cursor/skills/martins-trailmap"
   fi
 fi
 

@@ -1,17 +1,20 @@
 ---
-name: project-docs
-description: Lean-startup project docs and work loop for solo Claude+Cursor. Git docs (plans, decisions, last-steps), height gates, PR as done, Claude for spec/brainstorm and Cursor for coding. Use when starting work, planning, implementing, reviewing, opening a PR, hotfixes, spikes, security checks, or mentions of docs/, plans/, last-steps, handoff, ADR, agentd, worktrunk, or claude-mem.
+name: martins-trailmap
+description: Martin's Trailmap — lean-startup work loop and living git docs for solo Claude+Cursor. Plans, decisions, last-steps, height gates, PR as done; Claude specs, Cursor codes. Use when starting work, planning, implementing, reviewing, opening a PR, hotfixes, spikes, security checks, or mentions of trailmap, docs/, plans/, last-steps, handoff, ADR, agentd, worktrunk, or claude-mem.
 license: MIT
 compatibility: Requires git. Recommended: claude-mem on Claude and Cursor; vendor this skill into product repos for Cursor Cloud. Optional: worktrunk, agentd MCP, Cloudflare security-audit, ECC.
 metadata:
-  author: project-docs-skill
+  author: martin
+  display-name: Martin's Trailmap
   version: "1.4"
   audience: solo-lean-startup
 ---
 
-# Project docs
+# Martin's Trailmap
 
-Git-committed thinking so Claude and Cursor share one source of truth. **Profile: solo lean startup** — ship via PRs; keep ceremony proportional to height.
+Leave a trail in git so Claude and Cursor share one source of truth. **Profile: solo lean startup** — ship via PRs; keep ceremony proportional to height.
+
+Skill id: `martins-trailmap` (invoke `/martins-trailmap`). Repo/brand: **martin's-trailmap**.
 
 **Tool split (default):**
 - **Claude** — brainstorm, feature spec, research, sense-check, high-height decisions

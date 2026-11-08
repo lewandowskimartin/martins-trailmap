@@ -26,7 +26,7 @@ Evaluated for a **solo** developer doing occasional **big** multi-agent work, wi
 
 **What it is:** Huge Claude Code harness — dozens of agents, hundreds of skills, hooks, memory vault, AgentShield. Adapters for Cursor and others with uneven parity.
 
-**Worth folding into project-docs?** **No — not wholesale.**
+**Worth folding into Martin's Trailmap?** **No — not wholesale.**
 
 | Take | Leave |
 | --- | --- |

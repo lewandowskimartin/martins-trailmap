@@ -21,4 +21,4 @@ If plans live at top-level `plans/`, say so in this table and keep using that ro
 5. claude-mem on both hosts; git docs remain source of truth.
 6. Worktrunk/agentd only for real parallel work.
 
-Agents: follow the `project-docs` skill.
+Agents: follow the `martins-trailmap` skill (Martin's Trailmap).

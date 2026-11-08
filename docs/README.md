@@ -1,4 +1,4 @@
-# Project docs
+# Project docs (Martin's Trailmap)
 
 Shared thinking for Claude (spec/brainstorm) and Cursor (implement/PR).
 
@@ -19,4 +19,4 @@ Shared thinking for Claude (spec/brainstorm) and Cursor (implement/PR).
 5. claude-mem on both hosts; git docs remain source of truth.
 6. Worktrunk/agentd only for real parallel work.
 
-Agents: follow the `project-docs` skill (v1.4).
+Agents: follow the `martins-trailmap` skill (Martin's Trailmap).

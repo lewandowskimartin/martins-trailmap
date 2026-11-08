@@ -1,6 +1,10 @@
-# Project docs skill
+# Martin's Trailmap
 
 Lean-startup **Agent Skill** for solo Claude + Cursor: living git docs, height-gated work loop, **PR as the aim**.
+
+- **Brand / repo:** `martin's-trailmap`
+- **Skill id (folder + `/` command):** `martins-trailmap`  
+  (Agent Skills disallow apostrophes in `name`)
 
 ## Defaults (v1.4)
 
@@ -21,7 +25,7 @@ Lean-startup **Agent Skill** for solo Claude + Cursor: living git docs, height-g
 
 Orient → sense-check → research? → plan gate → parallel? → branch → baseline → implement → verify → brief check → **diff review** → security → fixes → **commit/push/PR** → end report
 
-Low/hotfix paths collapse ceremony — see skill.
+Low/hotfix paths collapse ceremony — see the skill.
 
 ## Quick install
 
@@ -34,13 +38,13 @@ npx skills add https://github.com/cloudflare/security-audit-skill \
   --skill security-audit --global
 ```
 
-Refresh skill copy in an app after skill-pack updates:
+Refresh skill copy in an app after Trailmap updates:
 
 ```bash
 REFRESH_PROJECT_SKILL=1 ./scripts/bootstrap-repo.sh ~/my-app
 ```
 
-agentd on Cursor (only for big DAG epics): see `skills/project-docs/references/agentd-cursor.md`.
+agentd on Cursor (big DAG epics only): `skills/martins-trailmap/references/agentd-cursor.md`.
 
 ## Why soft-before / full-after tests?
 
@@ -48,4 +52,4 @@ Fine for lean startup. Pure TDD on every MMF slows learning; empty tests-after l
 
 ## Decisions
 
-- `0001` memory layers · `0002` solo defaults · `0003` companions · `0004` work loop · `0005` lean v1.4
+- `0001` memory layers · `0002` solo defaults · `0003` companions · `0004` work loop · `0005` lean v1.4 · `0006` rename to Martin's Trailmap

@@ -5,21 +5,20 @@
 - **Branch:** main
 - **Updated:** 2026-11-08
 - **Active plan:** none
-- **Related decisions:** `0001`–`0005`
+- **Related decisions:** `0001`–`0006`
 
 ## Current state
 
-Skill pack **v1.4** — lean startup: PR as done, Claude/Cursor split, living multi-plans, soft-before/full-after tests, diff review, hotfix/mini paths, skill vendored by default for Cursor Cloud.
+Skill/repo branded **Martin's Trailmap**; technical skill id `martins-trailmap` (v1.4 content unchanged aside from rename).
 
 ## Just done
 
-- Applied audit answers into v1.4
-- Rewrote work-loop for instruction quality; added work-types + agentd-cursor
-- Bootstrap vendors skill unless `SKIP_PROJECT_SKILL=1`
+- Renamed `skills/project-docs` → `skills/martins-trailmap`
+- Updated install/bootstrap paths and docs; decision `0006`
 
 ## Next action
 
-On machines: `install-personal.sh` + `bootstrap-repo.sh` on product apps + claude-mem both hosts. Use Claude for specs, Cursor Cloud/local for implement→PR.
+Create GitHub repo as `martins-trailmap` (or `martin's-trailmap` if you insist on the apostrophe). Re-run `./scripts/install-personal.sh` on machines; refresh product repos with `REFRESH_PROJECT_SKILL=1`.
 
 ## Blockers / open questions
 
@@ -27,5 +26,4 @@ On machines: `install-personal.sh` + `bootstrap-repo.sh` on product apps + claud
 
 ## Do not redo
 
-- Do not skip diff review or PR on code work
-- Do not treat ECC/mem as replacing living plans / last-steps
+- Do not use skill `name: martin's-trailmap` — apostrophe is invalid; keep `martins-trailmap`
