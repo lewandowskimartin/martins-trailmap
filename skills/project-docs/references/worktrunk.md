@@ -10,7 +10,9 @@
 | Two+ agents or two heavy features at once | **Use it** — avoids stash hell and dirty-tree blocking |
 | Cloud Agent + local agent on same repo | Often helpful so each has its own worktree |
 
-You are solo and not using it yet: **do not install until you feel the pain of parallel work.** The skill still works without `wt`.
+Default for this owner: Claude specs, Cursor codes — often **sequential**, so skip Worktrunk until you run two coding agents at once (or Cloud + local on the same files).
+
+**Do not** let Claude and Cursor edit one dirty checkout in parallel without isolation.
 
 ## If you adopt it later
 

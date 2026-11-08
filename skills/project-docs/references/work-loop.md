@@ -1,74 +1,100 @@
-# Work loop (canonical)
+# Work loop
 
-Default pipeline for feature / epic work. Scale depth by **height** (low / medium / high) — do not run the heavy path on a one-line fix.
+Canonical pipeline for this skill. Scale by **work type** and **height**.
 
-## Pipeline
+## Full loop
 
 ```text
-1. Orient          last-steps → plan (if any) → decisions → optional mem search
-2. Sense-check     scope, height, constraints, “is this the real ask?”
-3. Research        only if plan missing/stale or facts uncertain
-4. Plan gate       write/update plan; high-height → ask before accepting
-5. Parallelism     would multiple workers help? (else stay single-threaded)
-6. Branch setup    branch; worktrunk/worktree only if parallel or isolation needed
-7. Baseline        fact-check current code + failing/absent proof of the gap
-8. Implement       do the work (update plan checklist as you go)
-9. Verify          tests / commands — evidence the work is done
-10. Brief check    code vs plan/success criteria — executed to brief?
-11. Security       lightweight always; full security-audit when warranted
-12. Fixes          only for real gaps from 9–11
-13. End report     docs: plan→done, last-steps, short report
+1  Orient         last-steps → living plan(s) → decisions → optional mem
+2  Sense-check    type, height, real ask
+3  Research       if plan missing/stale or facts uncertain
+4  Plan gate      medium: update plan → go | high: show plan → wait
+5  Parallelism    default no; else worktrunk / agentd
+6  Branch         feature/hotfix branch
+7  Baseline       code facts + soft test note (what proves done)
+8  Implement      tick living plan
+9  Verify         full tests after — keep evidence
+10 Brief check    vs success criteria
+11 Diff review    no sloppy code (edge cases, naming, error paths, dead code)
+12 Security       lightweight always; full audit if warranted
+13 Fixes          from 9–12 only
+14 Ship           commit → push → open PR
+15 End report     plan done + PR link + last-steps
 ```
 
-## Recommendations vs the raw checklist
+## Low mini-loop
 
-| Your step | Keep? | Change |
-| --- | --- | --- |
-| Check the plan | Yes | Also read `last-steps` + decisions first (orient) |
-| Sense-check | Yes | Do **before** heavy research; re-check after research if scope shifted |
-| Research / facts | Yes | **Conditional** — skip when plan is fresh and facts are clear |
-| Spread to workers? | Yes | Decide **before** branch setup; default **no** for linear solo work |
-| Branch / worktrunk | Yes | Plain branch by default; worktrunk only for parallel/isolation |
-| Check the code | Yes | Split into **baseline (pre)** and **verify (post)** — your list skipped **Implement** |
-| Cross-check vs plan | Yes | Against success criteria / checklist, not vibes |
-| Full security-audit | Conditional | Always do a **lightweight** security pass; full Cloudflare skill only for trust-boundary / high-height / pre-ship |
-| Fixes | Yes | Bound to findings from verify / brief / security |
-| End report | Yes | Land in **git docs**, not only chat |
+```text
+orient → sense-check → branch → implement → verify
+  → lightweight security → diff review → commit/push/PR → last-steps
+```
 
-## Critical fix: insert Implement
+## Hotfix
 
-Without an explicit implement step, “check the code / cross-check the plan” reads as audit-only. Order is: baseline → **implement** → verify → brief check → security → fixes → report.
+```text
+orient → blast radius → hotfix branch → implement → verify
+  → lightweight security → diff review → commit/push/PR → last-steps
+```
 
-## Security gating
+Backfill high-height docs after the fire.
 
-| Surface | What to run |
+## Gates
+
+### Plan
+
+| Height | Behavior |
 | --- | --- |
-| Low height, no trust boundary | Lightweight: secrets, authz guesses, unsafe defaults, logging PII |
-| Medium with user data / HTTP / storage | Lightweight + targeted review of changed surfaces |
-| High / auth / multi-tenant / payments / public API / pre-ship | Full **security-audit** skill; link report from end report |
+| Low | No formal plan |
+| Medium | Update living plan, continue |
+| High | Show plan (+ decisions); wait for OK |
 
-Do not burn a full multi-phase audit on every chore.
+### Parallelism — all must be true
 
-## Parallelism gating
+1. Separable tasks  
+2. Clear file/ownership boundaries  
+3. Will actually run 2+ agents  
+4. Merge cost acceptable  
 
-Spread work only if **all** are true:
+Else one agent, one branch. Prefer **not** Claude+Cursor on the same dirty checkout.
 
-1. Tasks are separable (weak coupling)
-2. Clear ownership / file boundaries (or agentd DAG)
-3. You will actually run 2+ agents
-4. Merge/integration cost is acceptable
+### Security
 
-Otherwise one worker + one branch.
+| Surface | Pass |
+| --- | --- |
+| Low, no trust boundary | Lightweight |
+| Medium + user data/HTTP/storage | Lightweight + changed-surface review |
+| High / auth / multi-tenant / payments / public API / pre-ship | Full security-audit skill |
 
-## End report (required for medium/high)
+### Ship
 
-Use `assets/templates/end-report.md`. Store under `docs/plans/done/` next to the finished plan, or as a short section appended when moving the plan. Also refresh `last-steps.md` (even if “idle — ready for next task”).
+Code work is not done until a **PR exists** (unless user said commit-only). PR body: goal, plan link, verify evidence, security pass type, follow-ups.
 
-Minimum contents:
+### Diff review checklist
 
-- Goal / plan link
-- What shipped (PR/commits)
-- Verify evidence (commands + results)
-- Brief check: criteria met / gaps
-- Security: lightweight or full audit + outcome
-- Follow-ups / non-goals left undone
+- Diff matches brief (no drive-by refactors unless needed)
+- Error/empty paths handled
+- No secrets, PII logs, or wide-open authz
+- Tests assert behavior (not just smoke)
+- Dead code / obviously sloppy structure fixed before PR
+
+## Tests: soft before, full after
+
+Lean default — **not inferior to pure TDD** when spikes and MMFs dominate.
+
+- Soft before: write down the proof command or a cheap failing stub
+- Full after: meaningful coverage of what shipped
+
+If a failure mode is safety-critical (auth, money, data loss), bias earlier toward a failing test before implement.
+
+## Tool split
+
+| Phase | Prefer |
+| --- | --- |
+| 1–4 (orient → plan) | Claude |
+| 5–6 (parallel / branch) | Either |
+| 7–14 (baseline → PR) | Cursor |
+| 15 (end report) | Cursor (or Claude if spec-only spike) |
+
+## End report
+
+Required for medium/high code work after PR. Template: `assets/templates/end-report.md`.

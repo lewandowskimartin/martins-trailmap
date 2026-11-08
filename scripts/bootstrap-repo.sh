@@ -112,24 +112,34 @@ EOF
   echo "seeded: docs/last-steps.md"
 fi
 
-# Optional: vendor skill into this repo (Cloud Agents / explicit share)
+# Vendor skill into the repo by default (Cursor Cloud needs repo skills).
+# Skip with: SKIP_PROJECT_SKILL=1
 SKILL_DEST=".claude/skills/project-docs"
-if [[ "${INSTALL_PROJECT_SKILL:-}" == "1" ]]; then
+if [[ "${SKIP_PROJECT_SKILL:-}" == "1" ]]; then
+  echo "skip: project skill vendoring (SKIP_PROJECT_SKILL=1)"
+else
   mkdir -p .claude/skills
   if [[ -e "$SKILL_DEST" ]]; then
-    echo "skip: $SKILL_DEST exists"
+    # Refresh copy when bootstrapping from an updated skill pack
+    if [[ "${REFRESH_PROJECT_SKILL:-}" == "1" ]]; then
+      rm -rf "$SKILL_DEST"
+      cp -R "$ROOT/skills/project-docs" "$SKILL_DEST"
+      echo "refreshed: $SKILL_DEST"
+    else
+      echo "skip: $SKILL_DEST exists (REFRESH_PROJECT_SKILL=1 to replace)"
+    fi
   else
     cp -R "$ROOT/skills/project-docs" "$SKILL_DEST"
     echo "created: $SKILL_DEST"
-    mkdir -p .agents/skills .cursor/skills
-    if [[ ! -e .agents/skills/project-docs ]]; then
-      ln -s ../../.claude/skills/project-docs .agents/skills/project-docs
-      echo "linked: .agents/skills/project-docs"
-    fi
-    if [[ ! -e .cursor/skills/project-docs ]]; then
-      ln -s ../../.claude/skills/project-docs .cursor/skills/project-docs
-      echo "linked: .cursor/skills/project-docs"
-    fi
+  fi
+  mkdir -p .agents/skills .cursor/skills
+  if [[ ! -e .agents/skills/project-docs ]]; then
+    ln -s ../../.claude/skills/project-docs .agents/skills/project-docs
+    echo "linked: .agents/skills/project-docs"
+  fi
+  if [[ ! -e .cursor/skills/project-docs ]]; then
+    ln -s ../../.claude/skills/project-docs .cursor/skills/project-docs
+    echo "linked: .cursor/skills/project-docs"
   fi
 fi
 
@@ -140,5 +150,6 @@ if [[ "$HAS_TOP_PLANS" -eq 1 ]]; then
 else
   echo "plans root: ./docs/plans/"
 fi
-echo "Solo tip: personal install is enough — ./scripts/install-personal.sh"
-echo "Cloud Agents tip: INSTALL_PROJECT_SKILL=1 $0"
+echo "Also run: ./scripts/install-personal.sh  # local Claude + Cursor"
+echo "Skip repo skill: SKIP_PROJECT_SKILL=1 $0"
+echo "Refresh repo skill: REFRESH_PROJECT_SKILL=1 $0"

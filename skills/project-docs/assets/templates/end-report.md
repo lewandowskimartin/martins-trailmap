@@ -1,7 +1,8 @@
 # End report: <title>
 
 - **Date:** YYYY-MM-DD
-- **Branch / PR:**
+- **Work type:** feature | bugfix | spike | hotfix | chore
+- **Branch / PR:** (URL required for code work)
 - **Plan:** `…` (moved to done / status)
 - **Height:** low | medium | high
 
@@ -11,6 +12,7 @@ One paragraph — what we set out to do.
 
 ## Shipped
 
+- PR: …
 - …
 
 ## Verify (evidence)
@@ -26,6 +28,11 @@ Commands / tests run and outcomes (pass/fail). No “seems fine.”
 Gaps vs plan (if any):
 
 - …
+
+## Diff review
+
+- **Outcome:** clean | fixes applied
+- **Notes:** (edge cases, sloppy bits removed)
 
 ## Security
 

@@ -1,45 +1,40 @@
-# Session protocol (detail)
+# Session protocol
 
-The canonical ordered pipeline is [work-loop.md](work-loop.md). This file is the short checklist form.
+Canonical ordered pipeline: [work-loop.md](work-loop.md). Work shapes: [work-types.md](work-types.md).
 
-## Cold start / orient
+## Orient
 
 ```text
-[ ] Detect layout (docs/, top-level plans/, decisions paths)
-[ ] Read docs/README.md map if present
-[ ] Read last-steps.md
-[ ] Skim active plan if any
-[ ] Open relevant decisions
-[ ] Optional: claude-mem search if last-steps is thin
-[ ] Sense-check ask + height
+[ ] Layout map (docs/, plans/)
+[ ] last-steps.md
+[ ] Living plan(s) — repo and/or branch scope
+[ ] Relevant decisions
+[ ] Optional mem search
+[ ] Sense-check type + height
+[ ] Tool: Claude (spec) vs Cursor (code) for this session?
 ```
 
-## When to write what
+## Write map
 
 | Event | Write |
 | --- | --- |
-| Exploring options | brainstorm (template) |
-| Agreed multi-step work | plan (template) |
-| Medium/high tradeoff | decision with Height field |
-| Stopping mid-loop | update last-steps |
-| Medium/high finished | end report + plan → done + last-steps |
+| Exploring | brainstorm |
+| Agreed / in-flight work | living plan (update often) |
+| Medium/high tradeoff | decision + Height |
+| Spec ready for Cursor | last-steps “ready for implement” |
+| Mid-loop stop | last-steps |
+| After PR (medium/high) | end report + plan done |
 
-## Decision height gate
+## Plan gate
 
-| Height | Agent behavior |
+| Height | Behavior |
 | --- | --- |
-| Low | No ADR; optional last-steps note; collapsed work loop OK |
-| Medium | May accept after documenting; full verify + brief check + lightweight security |
-| High | Propose only; wait for user; full loop + security-audit when trust boundaries |
+| Low | No formal plan |
+| Medium | Update plan → go |
+| High | Show plan → wait |
 
-When unsure → high.
+## Commits / PR
 
-## Templates
-
-New durable files use `assets/templates/*`. Do not mass-convert legacy free-form notes.
-
-## Commits
-
-- Prefer docs with the code they describe
-- Pure docs: `docs: …`
-- last-steps must not claim unverified work
+- Commit docs with related code
+- Code work aims at **push + PR**
+- last-steps must not claim unverified or un-PRed work as done

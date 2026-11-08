@@ -1,24 +1,22 @@
 # Project docs
 
-Shared thinking for humans and AI agents (Claude, Cursor, and others).
+Shared thinking for Claude (spec/brainstorm) and Cursor (implement/PR).
 
 | Path | Purpose |
 | --- | --- |
-| `last-steps.md` | Living handoff for this branch — read first |
-| `brainstorm/` | Explorations and option dumps |
-| `plans/active/` | In-flight implementation plans |
-| `plans/done/` | Finished plans (archive, do not delete) |
-| `decisions/` | Durable architecture / product decisions |
+| `last-steps.md` | Living handoff — read first |
+| `brainstorm/` | Explorations |
+| `plans/active/` | Living plans (update often; several OK — repo or branch scope) |
+| `plans/done/` | Finished plans + end reports |
+| `decisions/` | Durable decisions |
 
 ## Rules of thumb
 
-1. Resume from `last-steps.md`.
-2. **New** durable files use the `project-docs` templates.
-3. Decision height: **low** = no ADR; **medium** = agent may accept; **high** = ask first.
-4. claude-mem on Claude **and** Cursor complements this; it does not replace it.
-5. Keep secrets out of this folder.
-6. Worktrunk / agentd are optional — only for parallel / DAG epics.
-7. Cloudflare `security-audit` skill for sensitive surfaces before ship.
-8. ECC is an optional Claude harness — do not let it replace these docs.
+1. Resume from `last-steps.md` + the living plan.
+2. **Claude** specs; **Cursor** codes toward a **PR**.
+3. Plan gate: medium → go; high → show and wait.
+4. Soft tests before, full tests after; diff review before PR.
+5. claude-mem on both hosts; git docs remain source of truth.
+6. Worktrunk/agentd only for real parallel work.
 
-Agents: follow the `project-docs` skill.
+Agents: follow the `project-docs` skill (v1.4).

@@ -23,13 +23,21 @@ npx claude-mem install
 
 Bound to one UI. Promote keepers into docs.
 
+## Tool split (this owner)
+
+| Phase | Prefer | Persist in |
+| --- | --- | --- |
+| Brainstorm / spec / research | Claude | brainstorm, living plan, decisions |
+| Implement / verify / PR | Cursor (+ Cloud) | plan ticks, last-steps, end report, PR |
+| Switch tools | either | `last-steps` + living plan (required); mem helps |
+
 ## Practical split
 
 | Situation | Prefer |
 | --- | --- |
-| End of session / switch AI | `last-steps.md` + mem (automatic) |
+| End of session / switch AI | `last-steps.md` + living plan + mem |
 | Choosing DB / auth / public API | `docs/decisions/` (high height → ask) |
-| Multi-step feature | mapped plans root |
+| Multi-step feature | living plan in mapped plans root |
 | “Did we already try X?” | claude-mem search, then docs |
 | Secret / token | Neither |
 
