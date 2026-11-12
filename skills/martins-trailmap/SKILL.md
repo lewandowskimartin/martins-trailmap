@@ -6,7 +6,7 @@ compatibility: Requires git. Recommended: claude-mem on Claude and Cursor; vendo
 metadata:
   author: martin
   display-name: Martin's Trailmap
-  version: "1.6"
+  version: "1.7"
   audience: solo-lean-startup
 ---
 
@@ -86,9 +86,27 @@ Use `assets/templates/` for **new** durable files. Leave legacy free-form alone 
 | --- | --- | --- | --- |
 | **Low** | Typo, copy, obvious one-file fix | Skip formal plan | N/A |
 | **Medium** | Feature slice, refactor, test strategy | **Write/update plan → go** (no wait) | Agent may accept if reversible |
-| **High** | Auth, data store, public API, billing, irreversible migration | **Show plan (+ decisions) → wait for OK** | Wait for user |
+| **High** | Auth, data store, public API, billing, irreversible migration | **One grill round, show plan (+ decisions) → wait for OK** | Wait for user |
 
 Unsure → high.
+
+### Fog
+
+A question you can state precisely is a decision, even when the answer is still open. Record it on the living plan or as a decision.
+
+**Fog** is an unknown you cannot yet state as a precise question. Write it under **Not yet specified** on the living plan. A spike with no plan yet may keep it in `docs/brainstorm/`. Leave it coarse: one note may later become several questions, or none.
+
+When every sharp question is settled and fog is still listed, medium work may start. Name that remaining fog on the plan before building.
+
+### Grill
+
+One round, only when **height is high** or the **ask is too loose** to name the real outcome, work type, and height.
+
+Ask the questions whose prerequisites are already settled. Number each one. Give a recommended answer worded so **yes** accepts it. Look up facts yourself. Wait. The user owns the decisions.
+
+Medium work with a clear ask: update the living plan and go.
+
+Details: [references/work-loop.md](references/work-loop.md).
 
 ## Work types (lean startup)
 
@@ -111,9 +129,9 @@ This is the **one** pipeline. Ignore older “big-dev protocol” wording elsewh
 ### Full loop (medium / high feature or bugfix)
 
 1. **Orient** — map → `last-steps` → living plan(s) → decisions → optional mem
-2. **Sense-check** — real ask, type, height, constraints
+2. **Sense-check** — real ask, type, height, constraints. Too loose to name those → one grill round, then wait
 3. **Research** — only if plan missing/stale or facts uncertain (Claude-heavy)
-4. **Plan gate** — update living plan; **medium → go**; **high → show and wait**
+4. **Plan gate** — record fog on the living plan; **medium (clear ask) → go**; **high → one grill round, show plan, wait**
 5. **Parallelism** — default **no**. If yes → worktrunk and/or agentd
 6. **Branch** — feature/hotfix branch; worktrunk only if parallel/isolation
 7. **Baseline** — current code facts; **soft test note** (what will prove done)
@@ -223,6 +241,8 @@ Existing: map, fill gaps, don’t relocate `plans/` unless asked.
 ## Anti-patterns
 
 - Sloppy code that “matches the plan”
+- Fog written up as a sharp question, a task, or a ticket
+- A grill round on medium work whose ask is already clear
 - Claiming done without PR (for code work)
 - Full security-audit on every chore
 - Skipping verify or diff review on medium/high
