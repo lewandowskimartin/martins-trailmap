@@ -4,22 +4,22 @@
 
 - **Branch:** cursor/fog-and-grill-4696
 - **Updated:** 2026-11-12
-- **Active plan:** `docs/plans/active/2026-11-12-fog-and-grill.md`
-- **Related decisions:** `0008` (prior `0001`–`0007` on main)
+- **Active plan:** none (finished: `docs/plans/done/2026-11-12-fog-and-grill.md`)
+- **Related decisions:** `0008`
 - **Spike:** none
 
 ## Current state
 
-Trailmap **v1.7** in the working tree: fog under **Not yet specified** on the living plan; one grill round only when height is high or the ask is too loose to classify. Medium work with a clear ask still goes.
+Trailmap **v1.7** is on this branch and in PR #1. Fog lives under **Not yet specified** on the living plan. One grill round runs when height is high or the ask is too loose to classify. A clear medium ask still goes.
 
 ## Just done
 
-- Decision `0008`
-- Skill, work-loop, session protocol, plan template, READMEs
+- Skill, templates, gate references, decision `0008`
+- PR: https://github.com/lewandowskimartin/martins-trailmap/pull/1
 
 ## Next action
 
-Commit, push, open the PR. Then move the plan to `docs/plans/done/` with an end report and the PR link.
+Merge PR #1, then refresh vendored copies in product repos with `REFRESH_PROJECT_SKILL=1`.
 
 ## Blockers / open questions
 

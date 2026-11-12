@@ -1,12 +1,12 @@
 # Plan: Fog on the plan, one grill round
 
-- **Status:** active
+- **Status:** done
 - **Scope:** repo
 - **Branch:** cursor/fog-and-grill-4696
 - **Created:** 2026-11-12
 - **Updated:** 2026-11-12
-- **Completed:**
-- **PR:**
+- **Completed:** 2026-11-12
+- **PR:** https://github.com/lewandowskimartin/martins-trailmap/pull/1
 - **Decisions:** `docs/decisions/0008-fog-and-grill.md`
 - **Work type:** feature
 - **Height:** medium
@@ -33,20 +33,20 @@ Teach Trailmap v1.7 two rules inside the existing plan gate: record fog under **
 - [x] Work-loop and session-protocol gates
 - [x] Plan template **Not yet specified**
 - [x] README and docs README plan-gate lines
-- [ ] PR opened
+- [x] PR opened
 
 ## Success criteria
 
 - [x] Fog is defined as an unknown you cannot yet state as a precise question, stored on the living plan
 - [x] Grill is one round, with a recommended answer, only for high height or a loose ask
 - [x] Medium work with a clear ask still updates the plan and goes
-- [ ] PR opened
+- [x] PR opened
 
 ## Verify plan
 
 Docs-only. Proof is a read-through that the skill, work-loop, session protocol, plan template, and READMEs agree.
 
-- Re-read those files after the edit
+- Re-read those files after the edit: the three gate write-ups match
 
 ## Security note
 
