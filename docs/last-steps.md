@@ -2,24 +2,24 @@
 
 > Living handoff for this branch. Overwrite in place. Keep to one screen.
 
-- **Branch:** main
-- **Updated:** 2026-11-08
-- **Active plan:** none
-- **Related decisions:** `0001`–`0007`
-- **Spike:** `docs/brainstorm/2026-11-08-trailmap-fitness-audit.md`
+- **Branch:** cursor/fog-and-grill-4696
+- **Updated:** 2026-11-12
+- **Active plan:** `docs/plans/active/2026-11-12-fog-and-grill.md`
+- **Related decisions:** `0008` (prior `0001`–`0007` on main)
+- **Spike:** none
 
 ## Current state
 
-Trailmap **v1.6** — agents must not commit `.DS_Store` / OS junk; bootstrap ensures `.gitignore` entries.
+Trailmap **v1.7** in the working tree: fog under **Not yet specified** on the living plan; one grill round only when height is high or the ask is too loose to classify. Medium work with a clear ask still goes.
 
 ## Just done
 
-- Fitness audit spike
-- Added junk-file ship hygiene + repo `.gitignore` + bootstrap ignore seeding
+- Decision `0008`
+- Skill, work-loop, session protocol, plan template, READMEs
 
 ## Next action
 
-`git pull origin main && git push github main` on Mac clone; dogfood on a product MMF.
+Commit, push, open the PR. Then move the plan to `docs/plans/done/` with an end report and the PR link.
 
 ## Blockers / open questions
 
@@ -27,4 +27,6 @@ Trailmap **v1.6** — agents must not commit `.DS_Store` / OS junk; bootstrap en
 
 ## Do not redo
 
+- Do not split fog or grill into separate skills
+- Do not grill a medium slice whose ask is already clear
 - Do not treat mem as safe for NDA work

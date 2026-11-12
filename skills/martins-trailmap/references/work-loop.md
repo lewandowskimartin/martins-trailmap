@@ -8,7 +8,7 @@ Canonical pipeline for this skill. Scale by **work type** and **height**.
 1  Orient         last-steps → living plan(s) → decisions → optional mem
 2  Sense-check    type, height, real ask
 3  Research       if plan missing/stale or facts uncertain
-4  Plan gate      medium: update plan → go | high: show plan → wait
+4  Plan gate      record fog | medium clear ask: go | high: one grill round, show plan, wait
 5  Parallelism    default no; else worktrunk / agentd
 6  Branch         feature/hotfix branch
 7  Baseline       code facts + soft test note (what proves done)
@@ -45,8 +45,29 @@ Backfill high-height docs after the fire.
 | Height | Behavior |
 | --- | --- |
 | Low | No formal plan |
-| Medium | Update living plan, continue |
-| High | Show plan (+ decisions); wait for OK |
+| Medium | Update living plan (including fog), continue |
+| High | One grill round, show plan (+ decisions); wait for OK |
+| Loose ask | One grill round before type and height are fixed |
+
+### Fog
+
+The test is whether you can state the question precisely now.
+
+| Situation | Write |
+| --- | --- |
+| Question is sharp, answer still open | Plan item and, when it is a real tradeoff, a decision |
+| Cannot state the question yet | **Not yet specified** on the living plan. Spike with no plan yet: a brainstorm note |
+
+When a later answer makes a fog item stateable, promote that item to a question. A medium start with fog still listed is valid when the plan names what is still unknown.
+
+### Grill
+
+One round when height is high, or when sense-check cannot name the real ask, type, and height. Skip it for low, hotfix, and medium work with a clear ask.
+
+1. Ask only questions whose prerequisites are already settled.
+2. Number them. Recommended answer on each, worded so "yes" accepts it.
+3. Resolve facts from the repo, docs, and tools yourself. Ask the user for decisions.
+4. Wait. Write the answers into the living plan and any decisions. High still waits for OK on that plan. Medium with a clear ask then goes.
 
 ### Parallelism — all must be true
 

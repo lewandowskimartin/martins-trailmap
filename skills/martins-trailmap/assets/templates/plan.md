@@ -19,6 +19,12 @@ One paragraph. What “done” looks like (PR + criteria).
 
 - …
 
+## Not yet specified
+
+Unknowns you cannot yet state as a precise question. Leave empty when there are none.
+
+- …
+
 ## Checklist
 
 - [ ] …

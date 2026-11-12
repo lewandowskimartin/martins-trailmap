@@ -6,14 +6,14 @@ Lean-startup **Agent Skill** for solo Claude + Cursor: living git docs, height-g
 - **Skill id (folder + `/` command):** `martins-trailmap`  
   (Agent Skills disallow apostrophes in `name`)
 
-## Defaults (v1.6)
+## Defaults (v1.7)
 
 | Topic | Choice |
 | --- | --- |
 | Profile | Solo lean startup |
 | Tools | **Claude** = brainstorm/spec · **Cursor** = implement/PR (Cloud often) |
 | Plans | Living files in `docs/plans` (or existing top-level `plans/`); **several OK** (repo + branch) |
-| Plan gate | Medium → go · High → show & wait |
+| Plan gate | Medium (clear ask) → go · High → one grill round, then wait · Fog stays on the plan under **Not yet specified** |
 | Tests | Soft before, **full after** |
 | Review | Lightweight **diff review** (no sloppy code) |
 | Done | **PR opened** (+ verify/review/security) |
@@ -54,4 +54,4 @@ Fine for lean startup. Pure TDD on every MMF slows learning; empty tests-after l
 
 ## Decisions
 
-- `0001`–`0006` prior · `0007` memory privacy
+- `0001`–`0007` prior · `0008` fog on the plan, grill only when high or the ask is loose
